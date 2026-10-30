@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scientific Calculator</title>
+  <style>
+    body {
+      max-width: 420px;
+      margin: 40px auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    input, button {
+      box-sizing: border-box;
+      padding: 12px;
+      font-size: 1rem;
+    }
+
+    input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    #result {
+      min-height: 1.5em;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <h1>Scientific Calculator</h1>
+
+  <label for="first">First number</label>
+  <input id="first" type="number" step="any" placeholder="Enter a number">
+
+  <label for="second">Second number (for binary operations)</label>
+  <input id="second" type="number" step="any" placeholder="Optional">
+
+  <div class="buttons">
+    <button id="mode" onclick="toggleMode()">Degrees</button>
+    <button onclick="calculate('sin')">sin</button>
+    <button onclick="calculate('cos')">cos</button>
+    <button onclick="calculate('tan')">tan</button>
+
+    <button onclick="calculate('sqrt')">√x</button>
+    <button onclick="calculate('square')">x²</button>
+    <button onclick="calculate('log')">log₁₀</button>
+    <button onclick="calculate('ln')">ln</button>
+
+    <button onclick="calculate('add')">+</button>
+    <button onclick="calculate('subtract')">−</button>
+    <button onclick="calculate('multiply')">×</button>
+    <button onclick="calculate('divide')">÷</button>
+
+    <button onclick="calculate('power')">xʸ</button>
+    <button onclick="calculate('pi')">π</button>
+    <button onclick="calculate('clear')">Clear</button>
+  </div>
+
+  <p id="result" aria-live="polite">Result: </p>
+
+  <script>
+    let useDegrees = true;
+
+    function toggleMode() {
+      useDegrees = !useDegrees;
+      document.getElementById("mode").textContent =
+        useDegrees ? "Degrees" : "Radians";
+    }
+
+    function calculate(operation) {
+      const firstValue = document.getElementById("first").value;
+      const secondValue = document.getElementById("second").value;
+      const resultElement = document.getElementById("result");
+
+      if (operation === "clear") {
+        document.getElementById("first").value = "";
+        document.getElementById("second").value = "";
+        resultElement.textContent = "Result: ";
+        return;
+      }
+
+      const first = Number(firstValue);
+      const second = Number(secondValue);
+
+      if (operation !== "pi" && firstValue.trim() === "") {
+        resultElement.textContent = "Enter a first number.";
+        return;
+      }
+
+      let result;
+
+      switch (operation) {
+        case "add":
+          if (secondValue.trim() === "") return showError("Enter a second number.");
+          result = first + second;
+          break;
+        case "subtract":
+          if (secondValue.trim() === "") return showError("Enter a second number.");
+          result = first - second;
+          break;
+        case "multiply":
+          if (secondValue.trim() === "") return showError("Enter a second number.");
+          result = first * second;
+          break;
+        case "divide":
+          if (secondValue.trim() === "") return showError("Enter a second number.");
+          if (second === 0) return showError("Cannot divide by zero.");
+          result = first / second;
+          break;
+        case "power":
+          if (secondValue.trim() === "") return showError("Enter an exponent.");
+          result = first ** second;
+          break;
+        case "sqrt":
+          if (first < 0) return showError("Cannot take the square root of a negative number.");
+          result = Math.sqrt(first);
+          break;
+        case "square":
+          result = first ** 2;
+          break;
+        case "log":
+          if (first <= 0) return showError("Logarithm requires a number greater than zero.");
+          result = Math.log10(first);
+          break;
+        case "ln":
+          if (first <= 0) return showError("Natural logarithm requires a number greater than zero.");
+          result = Math.log(first);
+          break;
+        case "sin":
+        case "cos":
+        case "tan": {
+          const angle = useDegrees ? first * Math.PI / 180 : first;
+
+          if (operation === "sin") result = Math.sin(angle);
+          if (operation === "cos") result = Math.cos(angle);
+          if (operation === "tan") {
+            if (Math.abs(Math.cos(angle)) < 1e-12) {
+              return showError("Tangent is undefined for this angle.");
+            }
+            result = Math.tan(angle);
+          }
+          break;
+        }
+        case "pi":
+          result = Math.PI;
+          break;
+        default:
+          return showError("Unknown operation.");
+      }
+
+      if (!Number.isFinite(result)) {
+        return showError("The result is not a finite number.");
+      }
+
+      resultElement.textContent = `Result: ${Number(result.toPrecision(12))}`;
+    }
+
+    function showError(message) {
+      document.getElementById("result").textContent = `Error: ${message}`;
+    }
+  </script>
+</body>
+</html>

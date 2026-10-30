@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSS Webpage</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: lightblue;
+            text-align: center;
+        }
+
+        /* FLEXBOX */
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background: navy;
+            color: white;
+            padding: 15px;
+        }
+
+        /* ANIMATION */
+        h1 {
+            color: darkblue;
+            animation: move 2s;
+        }
+
+        @keyframes move {
+            from {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* CSS GRID */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+
+            /* TRANSITION */
+            transition: 0.5s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: lightyellow;
+        }
+
+        /* ANIMATION */
+        .circle {
+            background: red;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: rotate 3s infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h3>My Website</h3>
+        <p>Home | About | Contact</p>
+    </nav>
+
+    <h1>Welcome to My Webpage</h1>
+
+    <p>This webpage demonstrates advanced CSS features.</p>
+
+    <div class="circle"></div>
+
+    <div class="container">
+        <div class="card">
+            <h3>CSS Grid</h3>
+            <p>Arranges items in rows and columns.</p>
+        </div>
+
+        <div class="card">
+            <h3>Flexbox</h3>
+            <p>Aligns items in a row or column.</p>
+        </div>
+
+        <div class="card">
+            <h3>Animation</h3>
+            <p>Adds movement to elements.</p>
+        </div>
+    </div>
+
+</body>
+</html>
